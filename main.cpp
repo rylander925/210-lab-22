@@ -7,6 +7,7 @@ IDE Used: Visual Studio Code
 using namespace std;
 
 const int MIN_NR = 10, MAX_NR = 99, MIN_LS = 5, MAX_LS = 20;
+const int STREAM_IGNORE_CHARS = 128;
 
 class DoublyLinkedList {
 private:
@@ -29,20 +30,20 @@ public:
     DoublyLinkedList() { head = nullptr; tail = nullptr; }
 
     /**
-     * Deletes node at specified position, starting with head = position 1
-     * @param position Position of node to delete. Must be >=1.
+     * Deletes node at specified position, starting with head = position 0
+     * @param position Position of node to delete. Must be >=0.
      */
     void delete_pos(int position) {
-        if (position < 1) { 
-            cout << "ERROR in delete_pos(): Position must be >= 1" << endl;
+        if (position < 0) { 
+            cout << "ERROR in delete_pos(): Position must be >= 0" << endl;
             return;
         }
 
         Node* current = head;
         Node* nextNode = nullptr;
         Node* prevNode = nullptr;
-        // will execute position - 1 times or until current is a nullptr
-        for(int i = 1; i < position && current; i++) { 
+        // will execute position times or until current is a nullptr
+        for(int i = 0; i < position && current; i++) { 
             current = current->next;
         }
 
@@ -224,9 +225,39 @@ int main() {
         list.push_back(rand() % (MAX_NR-MIN_NR+1) + MIN_NR);
     cout << "List forward: ";
     list.print();
+    cout << endl;
 
-    cout << "List backward: ";
-    list.print_reverse();
+    int random_position = 1 + (rand() % size);
+    cout << "After deleting element at position " << random_position << ":" << endl;
+    list.delete_pos(random_position);
+    list.print();
+    cout << endl;
+
+    cout << "After deleting first two elements:" << endl;
+    list.pop_front();
+    list.pop_front();
+    list.print();
+    cout << endl;
+
+    cout << "After deleting last two elements:" << endl;
+    list.pop_back();
+    list.pop_back();
+    list.print();
+    cout << endl;
+
+    int delete_value = 0;
+    do {
+        if (cin.fail()) {
+            cout << "Input must be an integer. Trying again." << endl;
+            cin.clear();
+            cin.ignore(STREAM_IGNORE_CHARS, '\n');
+        }
+        cout << "Enter a value to attempt to delete: ";
+    } while(!(cin >> delete_value));
+    cout << "After attempting to delete element with value " << delete_value << ":" << endl;
+    list.delete_val(delete_value);
+    list.print();
+    cout << endl;
 
     cout << "Deleting list, then trying to print.\n";
     list.~DoublyLinkedList();
