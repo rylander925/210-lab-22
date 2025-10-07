@@ -28,12 +28,58 @@ public:
     // constructor
     DoublyLinkedList() { head = nullptr; tail = nullptr; }
 
+    /**
+     * Deletes node at specified position, starting with head = position 1
+     * @param position Position of node to delete. Must be >=1.
+     */
     void delete_pos(int position) {
         if (position < 1) { 
             cout << "ERROR in delete_pos(): Position must be >= 1" << endl;
             return;
         }
+
+        Node* current = head;
+        Node* nextNode = nullptr;
+        Node* prevNode = nullptr;
+        // will execute position - 1 times or until current is a nullptr
+        for(int i = 1; i < position && current; i++) { 
+            current = current->next;
+        }
+
+        if (!current) {
+            cout << "ERROR in delete_pos(): Given position exceeds list length" << endl;
+            return;
+        }
+
+        nextNode = current->next;
+        prevNode = current->prev;
+
+        if(nextNode) {
+            nextNode->prev = prevNode;
+        } else {
+            tail = prevNode;
+        }
+
+        if(prevNode) {
+            prevNode->next = nextNode;
+        } else {
+            head = nextNode;
+        }
+
+        delete current;
     }
+
+    /**
+     * Deletes head node
+     */
+    void pop_front() {
+
+    }
+
+    /**
+     * Deletes tail node
+     */
+    void pop_back() {}
 
     void push_back(int value) {
         Node* newNode = new Node(value);
@@ -88,7 +134,7 @@ public:
         temp->next = newNode;
     }
 
-    void delete_node(int value) {
+    void delete_val(int value) {
         if (!head) return; // Empty list
 
         Node* temp = head;
