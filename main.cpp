@@ -110,6 +110,34 @@ public:
         delete current;
     }
 
+    /**
+     * Deletes first node with the specified value
+     * @param value Value of node to delete
+     */
+    void delete_val(int value) {
+        if (!head) return; // Empty list
+
+        Node* temp = head;
+        while (temp && temp->data != value)
+            temp = temp->next;
+
+        if (!temp) return; // Value not found
+
+        if (temp->prev) {
+            temp->prev->next = temp->next;
+        } else {
+            head = temp->next; // Deleting the head
+        }
+
+        if (temp->next) {
+            temp->next->prev = temp->prev;
+        } else {
+            tail = temp->prev; // Deleting the tail
+        }
+
+        delete temp;
+    }
+    
     void push_back(int value) {
         Node* newNode = new Node(value);
         if (!tail)  // if there's no tail, the list is empty
@@ -163,30 +191,6 @@ public:
         temp->next = newNode;
     }
 
-    void delete_val(int value) {
-        if (!head) return; // Empty list
-
-        Node* temp = head;
-        while (temp && temp->data != value)
-            temp = temp->next;
-
-        if (!temp) return; // Value not found
-
-        if (temp->prev) {
-            temp->prev->next = temp->next;
-        } else {
-            head = temp->next; // Deleting the head
-        }
-
-        if (temp->next) {
-            temp->next->prev = temp->prev;
-        } else {
-            tail = temp->prev; // Deleting the tail
-        }
-
-        delete temp;
-    }
-
     void print() {
         Node* current = head;
         if (!current) return;
@@ -218,6 +222,8 @@ public:
 
 // Driver program
 int main() {
+    srand(time(0)); // seed random number for list values & delete position
+
     DoublyLinkedList list;
     int size = rand() % (MAX_LS-MIN_LS+1) + MIN_LS;
 
@@ -227,26 +233,30 @@ int main() {
     list.print();
     cout << endl;
 
+    // test delete_pos()
     int random_position = 1 + (rand() % size);
-    cout << "After deleting element at position " << random_position << ":" << endl;
+    cout << "After deleting element at position " << random_position << " (head is position 0):" << endl;
     list.delete_pos(random_position);
     list.print();
     cout << endl;
 
+    // test pop_front()
     cout << "After deleting first two elements:" << endl;
     list.pop_front();
     list.pop_front();
     list.print();
     cout << endl;
 
+    //test pop_back()
     cout << "After deleting last two elements:" << endl;
     list.pop_back();
     list.pop_back();
     list.print();
     cout << endl;
 
+    //test delete_value()
     int delete_value = 0;
-    do {
+    do { // validate input is an integer. does not check for valid number
         if (cin.fail()) {
             cout << "Input must be an integer. Trying again." << endl;
             cin.clear();
