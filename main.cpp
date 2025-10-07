@@ -73,13 +73,41 @@ public:
      * Deletes head node
      */
     void pop_front() {
+        if (!head) {
+            return; //If empty, return
+        }
 
+        Node* current = head;
+        if (current->next) {
+            current->next->prev = nullptr;
+            head = head->next;
+        } else { // if only node
+            head = nullptr;
+            tail = nullptr;
+        }
+
+        delete current;
     }
 
     /**
      * Deletes tail node
      */
-    void pop_back() {}
+    void pop_back() {
+        if (!tail) {
+            return; //If empty, return
+        }
+
+        Node* current = tail;
+        if (current->prev) {
+            current->prev->next = nullptr;
+            tail = tail->prev;
+        } else { //if only node
+            head = nullptr;
+            tail = nullptr;
+        }
+
+        delete current;
+    }
 
     void push_back(int value) {
         Node* newNode = new Node(value);
