@@ -28,6 +28,13 @@ public:
     // constructor
     DoublyLinkedList() { head = nullptr; tail = nullptr; }
 
+    void delete_pos(int position) {
+        if (position < 1) { 
+            cout << "ERROR in delete_pos(): Position must be >= 1" << endl;
+            return;
+        }
+    }
+
     void push_back(int value) {
         Node* newNode = new Node(value);
         if (!tail)  // if there's no tail, the list is empty
